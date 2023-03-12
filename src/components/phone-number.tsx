@@ -1,7 +1,7 @@
 import usePhoneNumber from '@/hooks/usePhoneNumber';
 
 const PhoneNumber = () => {
-  const [phoneNumber, onChangePhoneNumber] = usePhoneNumber('');
+  const { phoneNumber, onChangePhoneNumber } = usePhoneNumber('01012341234');
   return (
     <>
       <h1>핸드폰 번호</h1>

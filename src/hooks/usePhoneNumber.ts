@@ -1,54 +1,58 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useCallback } from 'react';
 
-type UsePhoneNumberReturnType = [
-  phoneNumber: string,
-  handleChange: (event: ChangeEvent<HTMLInputElement>) => void,
-];
+type UsePhoneNumberReturnType = {
+  phoneNumber: string;
+  onChangePhoneNumber: (event: ChangeEvent<HTMLInputElement>) => void;
+};
 
-const formatPhoneNumber = (input: string): string => {
-  const phoneNumberWithoutHyphen = input.replace(/-/g, '');
-  const phoneNumberLength = phoneNumberWithoutHyphen.length;
+const usePhoneNumber = (
+  initialPhoneNumber: string,
+): UsePhoneNumberReturnType => {
+  const formatPhoneNumber = useCallback((input: string): string => {
+    const phoneNumberWithoutHyphen = input.replace(/-/g, '');
+    const phoneNumberLength = phoneNumberWithoutHyphen.length;
 
-  let formattedPhoneNumber = '';
-  if (phoneNumberLength < 4) {
-    formattedPhoneNumber = phoneNumberWithoutHyphen;
-  } else if (phoneNumberLength < 7) {
-    formattedPhoneNumber = `${phoneNumberWithoutHyphen.slice(
-      0,
-      3,
-    )}-${phoneNumberWithoutHyphen.slice(3)}`;
-  } else if (phoneNumberLength < 11) {
-    formattedPhoneNumber = `${phoneNumberWithoutHyphen.slice(
-      0,
-      3,
-    )}-${phoneNumberWithoutHyphen.slice(3, 6)}-${phoneNumberWithoutHyphen.slice(
-      6,
-    )}`;
-  } else {
-    formattedPhoneNumber = `${phoneNumberWithoutHyphen.slice(
+    if (phoneNumberLength < 4) {
+      return phoneNumberWithoutHyphen;
+    }
+    if (phoneNumberLength < 7) {
+      return `${phoneNumberWithoutHyphen.slice(
+        0,
+        3,
+      )}-${phoneNumberWithoutHyphen.slice(3)}`;
+    }
+    if (phoneNumberLength < 11) {
+      return `${phoneNumberWithoutHyphen.slice(
+        0,
+        3,
+      )}-${phoneNumberWithoutHyphen.slice(
+        3,
+        6,
+      )}-${phoneNumberWithoutHyphen.slice(6)}`;
+    }
+    return `${phoneNumberWithoutHyphen.slice(
       0,
       3,
     )}-${phoneNumberWithoutHyphen.slice(3, 7)}-${phoneNumberWithoutHyphen.slice(
       7,
       11,
     )}`;
-  }
+  }, []);
 
-  return formattedPhoneNumber;
-};
-
-const usePhoneNumber = (initValue: string): UsePhoneNumberReturnType => {
-  const [phoneNumber, setPhoneNumber] = useState<string>(
-    formatPhoneNumber(initValue),
+  const [phoneNumber, setPhoneNumber] = useState<string>(() =>
+    formatPhoneNumber(initialPhoneNumber),
   );
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    const input = event.target.value;
-    const formattedPhoneNumber = formatPhoneNumber(input);
-    setPhoneNumber(formattedPhoneNumber);
-  };
+  const onChangePhoneNumber = useCallback(
+    (event: ChangeEvent<HTMLInputElement>): void => {
+      const input = event.target.value;
+      const formattedPhoneNumber = formatPhoneNumber(input);
+      setPhoneNumber(formattedPhoneNumber);
+    },
+    [formatPhoneNumber],
+  );
 
-  return [phoneNumber, handleChange];
+  return { phoneNumber, onChangePhoneNumber };
 };
 
 export default usePhoneNumber;
