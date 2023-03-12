@@ -37,8 +37,10 @@ const formatPhoneNumber = (input: string): string => {
   return formattedPhoneNumber;
 };
 
-const usePhoneNumber = (): UsePhoneNumberReturnType => {
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
+const usePhoneNumber = (initValue: string): UsePhoneNumberReturnType => {
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    formatPhoneNumber(initValue),
+  );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const input = event.target.value;
