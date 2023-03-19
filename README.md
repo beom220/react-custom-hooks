@@ -16,7 +16,7 @@
 
   <summary>Click to toggle contents of <strong>Hooks</strong></summary>
 
-#### [usePhoneNumber](https://github.com/beom220/react-custom-hooks/blob/main/src/hooks/usePhoneNumber.ts)
+#### [usePhoneNumber](https://github.com/beom220/react-custom-hooks/blob/main/src/hooks/usePhoneNumber.md)
 
 
 </details>
